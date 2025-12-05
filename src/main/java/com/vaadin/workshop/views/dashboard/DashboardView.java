@@ -32,7 +32,7 @@ import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Dashboard")
 @Route("dashboard")
-@Menu(order = 2, icon = LineAwesomeIconUrl.CHART_AREA_SOLID)
+@Menu(order = 3, icon = LineAwesomeIconUrl.CHART_AREA_SOLID)
 public class DashboardView extends Main {
 
     public DashboardView() {
