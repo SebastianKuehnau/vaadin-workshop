@@ -1,20 +1,40 @@
 package com.vaadin.workshop.data;
 
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 
 @Entity
 public class SamplePerson extends AbstractEntity {
 
+    @NotBlank(message = "First name must not be empty")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
     private String firstName;
+
+    @NotBlank(message = "Last name must not be empty")
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
     private String lastName;
-    @Email
+
+    @NotNull(message = "Email must not be null")
+    @Email(message = "Email must be in a valid format")
     private String email;
+
+    @Pattern(regexp = "^[+]?[(]?[0-9]{1,4}[)]?[-\\s./0-9]*$",
+            message = "Phone number has an invalid format")
     private String phone;
+
+    @Past(message = "Date of birth must be in the past")
+    @NotNull(message = "Date of birth must not be null")
     private LocalDate dateOfBirth;
+
+    @Size(max = 100, message = "Occupation must not exceed 100 characters")
     private String occupation;
+
+    @NotBlank(message = "Role must not be empty")
+    @Size(max = 50, message = "Role must not exceed 50 characters")
     private String role;
+
     private boolean important;
 
     public String getFirstName() {
