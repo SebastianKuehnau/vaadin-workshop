@@ -43,6 +43,8 @@ public class PlaygroundView extends VerticalLayout {
                 pageable -> service.list(pageable, createNameFilter(filterField.getValue())).getContent());
         filterField.addValueChangeListener(e -> dataView.refreshAll());
         add(grid);
+
+        setSizeFull();
     }
 
     private Specification<SamplePerson> createNameFilter(String filterText) {
