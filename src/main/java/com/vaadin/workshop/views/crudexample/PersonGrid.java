@@ -45,11 +45,13 @@ class PersonGrid extends Div {
 
         // when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> {
-            if (event.getValue() != null) {
-                UI.getCurrent().navigate(String.format(CrudExampleView.SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
-            } else {
-                formClean.run();
-                UI.getCurrent().navigate(CrudExampleView.class);
+            if (event.isFromClient()) {
+                if (event.getValue() != null) {
+                    UI.getCurrent().navigate(String.format(CrudExampleView.SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
+                } else {
+                    formClean.run();
+                    UI.getCurrent().navigate(CrudExampleView.class);
+                }
             }
         });
     }
@@ -58,5 +60,9 @@ class PersonGrid extends Div {
     void refreshGrid() {
         grid.select(null);
         grid.getDataProvider().refreshAll();
+    }
+
+    void selectItem(SamplePerson samplePerson) {
+        grid.select(samplePerson);
     }
 }

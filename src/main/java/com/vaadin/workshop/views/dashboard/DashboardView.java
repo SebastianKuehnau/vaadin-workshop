@@ -8,6 +8,7 @@ import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.html.Span;

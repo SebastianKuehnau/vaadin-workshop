@@ -8,6 +8,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -32,6 +33,7 @@ class PersonForm extends Div {
 
     private final Button cancel = new Button("Cancel");
     private final Button save = new Button("Save");
+    private final Button delete = new Button("", VaadinIcon.TRASH.create());
 
     private final SamplePersonService samplePersonService;
     private final SerializableRunnable refreshGridRunnable;
@@ -52,13 +54,23 @@ class PersonForm extends Div {
         // Bind fields. This is where you'd define e.g. validation rules
         binder.bindInstanceFields(this);
 
+        delete.addClickListener(this::clickDeleteButton);
         save.addClickListener(this::clickSaveButton);
         cancel.addClickListener(this::clickCancelButton);
+    }
+
+    private void clickDeleteButton(ClickEvent<Button> buttonClickEvent) {
+        samplePersonService.delete(samplePerson.getId());
+        clearForm();
+        refreshGridRunnable.run();
+        Notification.show("Data deleted");
     }
 
     private void clickCancelButton(ClickEvent<Button> buttonClickEvent) {
         clearForm();
         refreshGridRunnable.run();
+
+        Notification.show("Data not saved");
     }
 
     private void clickSaveButton(ClickEvent<Button> buttonClickEvent) {
@@ -103,11 +115,14 @@ class PersonForm extends Div {
         buttonLayout.setClassName("button-layout");
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
+                ButtonVariant.LUMO_TERTIARY);
 
         save.setId("save-button");
         cancel.setId("cancel-button");
+        delete.setId("delete-button");
 
-        buttonLayout.add(save, cancel);
+        buttonLayout.add(delete, cancel, save);
         return buttonLayout;
     }
 

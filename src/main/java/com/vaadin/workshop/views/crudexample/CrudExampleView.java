@@ -56,6 +56,7 @@ public class CrudExampleView extends Div implements BeforeEnterObserver {
             Optional<SamplePerson> samplePersonFromBackend = samplePersonService.get(samplePersonId.get());
             if (samplePersonFromBackend.isPresent()) {
                 form.populateForm(samplePersonFromBackend.get());
+                grid.selectItem(samplePersonFromBackend.get());
             } else {
                 Notification.show(
                         String.format("The requested samplePerson was not found, ID = %s", samplePersonId.get()), 3000,

@@ -1,0 +1,15 @@
+.playground-view vaadin-button.red-button {
+    background-color: red;
+    color: white;
+}
+
+
+.playground-view vaadin-button.purple-button {
+    background-color: purple;
+    color: white;
+}
+
+.playground-view vaadin-button.yellow-button {
+    background-color: orange;
+    color: black;
+}

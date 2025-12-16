@@ -9,12 +9,15 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.BrowserTest;
 import org.junit.jupiter.api.Assertions;
 import com.vaadin.workshop.views.AbstractIT;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class CrudExampleViewIT extends AbstractIT {
 
     @Override
@@ -58,13 +61,16 @@ public class CrudExampleViewIT extends AbstractIT {
 
         $(ButtonElement.class).waitForFirst();
 
-        ButtonElement saveButton = $(ButtonElement.class).withCaption("Save").single();
-        ButtonElement cancelButton = $(ButtonElement.class).withCaption("Cancel").single();
+        ButtonElement saveButton = $(ButtonElement.class).withId("save-button").single();
+        ButtonElement cancelButton = $(ButtonElement.class).withId("cancel-button").single();
+        ButtonElement deleteButton = $(ButtonElement.class).withId("delete-button").single();
 
         assertNotNull(saveButton, "Save button should be present");
         assertNotNull(cancelButton, "Cancel button should be present");
+        assertNotNull(deleteButton, "Delete button should be present");
         assertTrue(saveButton.isDisplayed(), "Save button should be visible");
         assertTrue(cancelButton.isDisplayed(), "Cancel button should be visible");
+        assertTrue(deleteButton.isDisplayed(), "Delete button should be visible");
     }
 
     @BrowserTest
@@ -75,7 +81,7 @@ public class CrudExampleViewIT extends AbstractIT {
                 "Software Developer", "Senior Developer", true);
 
         // Click save button
-        ButtonElement saveButton = $(ButtonElement.class).withCaption("Save").waitForFirst();
+        ButtonElement saveButton = $(ButtonElement.class).withId("save-button").single();
         saveButton.click();
 
         // Check for success notification
@@ -89,11 +95,30 @@ public class CrudExampleViewIT extends AbstractIT {
         firstName.setValue("Test");
 
         // Click cancel
-        ButtonElement cancelButton = $(ButtonElement.class).withCaption("Cancel").single();
+        ButtonElement cancelButton = $(ButtonElement.class).withId("cancel-button").single();
         cancelButton.click();
+
+        // Check for cancel notification
+        assertNotificationShown("Data not saved");
 
         // Verify form is cleared
         Assertions.assertEquals("", firstName.getValue(), "Form should be cleared after cancel");
+    }
+
+    @BrowserTest
+    public void testDeletePerson() {
+        GridElement grid = $(GridElement.class).waitForFirst();
+
+        var beforeCount = grid.getRowCount();
+        grid.select(0);
+
+        ButtonElement deleteButton = $(ButtonElement.class).withId("delete-button").single();
+        deleteButton.click();
+
+        GridElement newGrid = $(GridElement.class).first();
+
+        var afterCount = newGrid.getRowCount();
+        Assertions.assertTrue(beforeCount > afterCount, "Grid should have one less row after deletion");
     }
 
     @BrowserTest
@@ -116,7 +141,7 @@ public class CrudExampleViewIT extends AbstractIT {
     @BrowserTest
     public void testFormValidation() {
         // Try to save with empty required fields
-        ButtonElement saveButton = $(ButtonElement.class).withCaption("Save").first();
+        ButtonElement saveButton = $(ButtonElement.class).withId("save-button").single();
         saveButton.click();
 
         // Should show validation error notification
@@ -130,7 +155,7 @@ public class CrudExampleViewIT extends AbstractIT {
                 "123456789", LocalDate.of(1985, 3, 10),
                 "Tester", "QA", false);
 
-        ButtonElement saveButton = $(ButtonElement.class).withCaption("Save").first();
+        ButtonElement saveButton = $(ButtonElement.class).withId("save-button").single();
         saveButton.click();
 
         // Should show validation error
@@ -166,7 +191,7 @@ public class CrudExampleViewIT extends AbstractIT {
             firstName.setValue(originalName + " Modified");
 
             // Save changes
-            ButtonElement saveButton = $(ButtonElement.class).withCaption("Save").single();
+            ButtonElement saveButton = $(ButtonElement.class).withId("save-button").single();
             saveButton.click();
 
             // Verify success notification

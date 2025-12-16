@@ -21,7 +21,7 @@ class CrudExampleFactory {
         return samplePersonService;
     }
 
-    public PersonGrid createGrid(SerializableRunnable clearForm) {
+    PersonGrid createGrid(SerializableRunnable clearForm) {
         return new PersonGrid(samplePersonService, clearForm);
     }
 }

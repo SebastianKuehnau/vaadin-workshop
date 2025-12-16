@@ -1,0 +1,4 @@
+.product-management vaadin-button {
+    --vaadin-button-background: orange;
+    --vaadin-button-text-color: black;
+}
